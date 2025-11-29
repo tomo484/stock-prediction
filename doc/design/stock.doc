@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>銘柄詳細ページ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;family=Noto+Sans+JP:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#135bec",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Manrope", "Noto Sans JP", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<header class="sticky top-0 z-10 flex h-16 w-full items-center justify-center border-b border-zinc-200/50 bg-background-light/80 backdrop-blur-sm dark:border-zinc-800/50 dark:bg-background-dark/80">
+<div class="flex w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+<div class="flex items-center gap-4 text-zinc-900 dark:text-white">
+<div class="text-primary size-7">
+<svg fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_330)">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill="currentColor" fill-rule="evenodd"></path>
+</g>
+<defs>
+<clippath id="clip0_6_330">
+<rect fill="white" height="48" width="48"></rect>
+</clippath>
+</defs>
+</svg>
+</div>
+<h1 class="text-lg font-bold leading-tight tracking-[-0.015em]">急騰株AIアナライザー</h1>
+</div>
+<div class="hidden items-center gap-8 md:flex">
+<a class="text-sm font-medium text-zinc-600 hover:text-primary dark:text-zinc-400 dark:hover:text-primary" href="#">ダッシュボード</a>
+<a class="text-sm font-medium text-zinc-600 hover:text-primary dark:text-zinc-400 dark:hover:text-primary" href="#">銘柄検索</a>
+<a class="text-sm font-medium text-primary dark:text-primary" href="#">ランキング</a>
+<a class="text-sm font-medium text-zinc-600 hover:text-primary dark:text-zinc-400 dark:hover:text-primary" href="#">設定</a>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
+<span class="material-symbols-outlined text-xl">notifications</span>
+</button>
+<button class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-zinc-100 text-zinc-600 transition-colors hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700">
+<span class="material-symbols-outlined text-xl">help</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDXu1zlakEYs3D3y9EQxUBzIs9DiQC2gkeNIU7yx7K6TYbkLSbFkKXNv_0WVVx035nxwUngrBZZxZc0_kQt6F4s4EUHBUX5_n-bubXdLwHCZxeR6xMg6DWPQGj7DnbE4xyD0-1K9y9xJ7qvUVVJHTkjAKkeVlaivAApPWmGApEWhriL0Y3110SJkqf7D5ID0xEmRQCTQDbeXW-IBInOSVVrChawcaH1EiA5wHZqbBAjLIvYeqKqNpEl0hwXcN5BYfKRpmXkPugYx0y7");'></div>
+</div>
+</div>
+</header>
+<main class="flex w-full flex-1 justify-center py-8 sm:py-12">
+<div class="w-full max-w-4xl flex-1 px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-4">
+<div class="flex flex-wrap items-center gap-2">
+<a class="text-sm font-medium text-zinc-500 hover:text-primary dark:text-zinc-400 dark:hover:text-primary" href="#">ランキング</a>
+<span class="text-sm font-medium text-zinc-400 dark:text-zinc-500">/</span>
+<span class="text-sm font-medium text-zinc-900 dark:text-zinc-100">銘柄詳細</span>
+</div>
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex flex-col gap-1">
+<h2 class="text-3xl font-extrabold tracking-tighter text-zinc-900 dark:text-white sm:text-4xl">株式会社AIテクノロジー (9999 / TYO)</h2>
+<p class="text-base text-zinc-500 dark:text-zinc-400">情報・通信業</p>
+</div>
+</div>
+</div>
+<div class="flex flex-col rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+<div class="border-b border-zinc-200 p-4 dark:border-zinc-800 sm:p-6">
+<h3 class="text-lg font-bold text-zinc-900 dark:text-white">過去のTop 5ランクイン履歴</h3>
+</div>
+<div class="p-4 sm:p-6">
+<div class="grid grid-cols-[auto_1fr] gap-x-4 sm:gap-x-6">
+<!-- Timeline Item 1 -->
+<div class="flex flex-col items-center gap-1.5 pt-1.5">
+<div class="flex size-8 items-center justify-center rounded-full bg-amber-400/20 text-amber-400">
+<span class="material-symbols-outlined text-lg">workspace_premium</span>
+</div>
+<div class="w-px grow bg-zinc-200 dark:bg-zinc-700"></div>
+</div>
+<div class="flex flex-1 flex-col pb-10">
+<p class="text-xs text-zinc-500 dark:text-zinc-400">2023/10/26</p>
+<div class="mt-2 flex flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<p class="text-base font-bold text-zinc-900 dark:text-white">1位</p>
+<p class="font-semibold text-green-500 dark:text-green-400">+15.8%</p>
+</div>
+<div class="text-sm text-zinc-600 dark:text-zinc-300">
+<p class="font-medium">AI分析による急騰理由:</p>
+<p class="mt-1">テクニカル指標の好転と市場心理の改善を検知。特に出来高の急増がポジティブなシグナルとして捉えられました。</p>
+</div>
+</div>
+</div>
+<!-- Timeline Item 2 -->
+<div class="flex flex-col items-center gap-1.5">
+<div class="w-px bg-zinc-200 dark:bg-zinc-700"></div>
+<div class="flex size-8 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-lg">trending_up</span>
+</div>
+<div class="w-px grow bg-zinc-200 dark:bg-zinc-700"></div>
+</div>
+<div class="flex flex-1 flex-col pb-10">
+<p class="text-xs text-zinc-500 dark:text-zinc-400">2023/08/15</p>
+<div class="mt-2 flex flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<p class="text-base font-bold text-zinc-900 dark:text-white">3位</p>
+<p class="font-semibold text-green-500 dark:text-green-400">+9.2%</p>
+</div>
+<div class="text-sm text-zinc-600 dark:text-zinc-300">
+<p class="font-medium">AI分析による急騰理由:</p>
+<p class="mt-1">好決算発表に対する市場のポジティブな反応を予測。アナリスト予想を上回る業績が株価を押し上げました。</p>
+</div>
+</div>
+</div>
+<!-- Timeline Item 3 -->
+<div class="flex flex-col items-center gap-1.5">
+<div class="w-px bg-zinc-200 dark:bg-zinc-700"></div>
+<div class="flex size-8 items-center justify-center rounded-full bg-primary/20 text-primary">
+<span class="material-symbols-outlined text-lg">trending_up</span>
+</div>
+</div>
+<div class="flex flex-1 flex-col">
+<p class="text-xs text-zinc-500 dark:text-zinc-400">2023/05/01</p>
+<div class="mt-2 flex flex-col gap-3 rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-800/50">
+<div class="flex flex-wrap items-center justify-between gap-2">
+<p class="text-base font-bold text-zinc-900 dark:text-white">5位</p>
+<p class="font-semibold text-green-500 dark:text-green-400">+7.5%</p>
+</div>
+<div class="text-sm text-zinc-600 dark:text-zinc-300">
+<p class="font-medium">AI分析による急騰理由:</p>
+<p class="mt-1">競合他社との大型提携に関するニュースを材料視。事業拡大への期待感が投資家の買いを誘いました。</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

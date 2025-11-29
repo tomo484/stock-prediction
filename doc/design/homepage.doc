@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="dark" lang="ja"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>メインダッシュボード</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Noto+Sans+JP:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#135bec",
+            "background-light": "#f6f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Manrope", "Noto Sans JP", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px",
+          },
+        },
+      },
+    }
+  </script>
+<style>.material-symbols-outlined {
+    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24
+    }
+.hero-bg {
+    background-image: linear-gradient(rgba(16, 22, 34, 0.6) 0%, rgba(16, 22, 34, 1) 100%), url(https://lh3.googleusercontent.com/aida-public/AB6AXuBg7uPRjuRnsdy9noGcIvdOE3eSyHLrOV91rwoEnH5YjEVXe2jxG8IjHii6VGnJZuaPNd153m_oiQMFw_b8t8THGfeRyOgVgr6sp0F-b_nKEeUemgnIbFjVnwp9wSzchOb2Dh1PACC9FEQuh2VpSpEy6KqdbF7kw9SuUgYFLN7CtkBtzpeeIhcPAWTWZKuqSmsOpttrWqJ9t7QljBHyUJ3yxpEhh81f7N3ABXcmm6APxSkmlGVDTCkhEa3fbvY2oKg2SWl-NpdfH-4B);
+    background-size: cover;
+    background-position: center bottom
+    }</style>
+</head>
+<body class="font-display">
+<div class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<div class="flex flex-1 justify-center">
+<div class="layout-content-container flex flex-col w-full max-w-[960px] flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-white/10 px-4 sm:px-10 py-3">
+<div class="flex items-center gap-4 text-white">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_330)">
+<path clip-rule="evenodd" d="M24 0.757355L47.2426 24L24 47.2426L0.757355 24L24 0.757355ZM21 35.7574V12.2426L9.24264 24L21 35.7574Z" fill-rule="evenodd"></path>
+</g>
+<defs>
+<clipPath id="clip0_6_330">
+<rect fill="white" height="48" width="48"></rect>
+</clipPath>
+</defs>
+</svg>
+</div>
+<h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">AI株分析</h2>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/80 transition-colors">
+<span class="truncate">ログイン</span>
+</button>
+</header>
+<main class="flex-grow">
+<div class="@container">
+<div class="flex min-h-[480px] flex-col gap-6 items-center justify-center p-4 text-center hero-bg @[480px]:gap-8">
+<div class="flex flex-col gap-2">
+<h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em] @[480px]:text-5xl @[480px]:font-black @[480px]:leading-tight @[480px]:tracking-[-0.033em]">
+                      AIが急騰株を即座に分析
+                    </h1>
+<h2 class="text-slate-300 text-sm font-normal leading-normal @[480px]:text-base @[480px]:font-normal @[480px]:leading-normal max-w-2xl mx-auto">
+                      最新のデータに基づき、AIが選出した注目の急騰株を毎日更新。あなたの投資判断をサポートします。
+                    </h2>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base @[480px]:font-bold @[480px]:leading-normal @[480px]:tracking-[0.015em] hover:bg-primary/80 transition-colors">
+<span class="truncate">AIによる分析を読む（Dashboardへ）</span>
+</button>
+</div>
+</div>
+<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between px-4 sm:px-6 pt-12 sm:pt-16">
+<h2 class="text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Top 5銘柄 AI分析結果</h2>
+<div class="flex items-center justify-between gap-2 rounded-lg bg-[#192233]/70 border border-[#324467] p-1.5 self-start sm:self-center">
+<button class="flex h-8 w-8 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-white/10 hover:text-white">
+<span class="material-symbols-outlined text-xl">chevron_left</span>
+</button>
+<span class="text-white text-sm font-semibold whitespace-nowrap">2024年7月25日</span>
+<button class="flex h-8 w-8 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-white/10 hover:text-white">
+<span class="material-symbols-outlined text-xl">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 gap-4 px-4 sm:px-6 py-6 sm:grid-cols-2 lg:grid-cols-3">
+<div class="group flex cursor-pointer flex-col gap-4 rounded-xl border border-[#324467] bg-gradient-to-br from-[#192233]/70 to-[#111722]/50 p-5 transition-all duration-300 hover:border-primary hover:shadow-2xl hover:shadow-primary/20">
+<div class="flex items-center justify-between">
+<div class="flex items-baseline gap-3">
+<span class="text-2xl font-bold text-slate-400">1</span>
+<h3 class="text-base font-bold text-white">テクノロジー・イノベーションズ (1234)</h3>
+</div>
+<div class="text-lg font-bold text-[#00FFAB]" style="text-shadow: 0 0 8px rgba(0, 255, 171, 0.5);">+21.5%</div>
+</div>
+<p class="text-sm leading-relaxed text-slate-400">画期的な新技術の発表により、市場の期待が集中。AIは短期的な強い上昇トレンドを予測しています。</p>
+<div class="mt-auto flex items-center justify-end gap-1 text-sm font-medium text-primary transition-colors group-hover:text-white">
+<span>詳細分析を見る</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+</div>
+</div>
+<div class="group flex cursor-pointer flex-col gap-4 rounded-xl border border-[#324467] bg-gradient-to-br from-[#192233]/70 to-[#111722]/50 p-5 transition-all duration-300 hover:border-primary hover:shadow-2xl hover:shadow-primary/20">
+<div class="flex items-center justify-between">
+<div class="flex items-baseline gap-3">
+<span class="text-2xl font-bold text-slate-400">2</span>
+<h3 class="text-base font-bold text-white">バイオヘルス・ソリューションズ (5678)</h3>
+</div>
+<div class="text-lg font-bold text-[#00FFAB]" style="text-shadow: 0 0 8px rgba(0, 255, 171, 0.5);">+18.2%</div>
+</div>
+<p class="text-sm leading-relaxed text-slate-400">臨床試験の成功が好感され、投資家の関心が高まっています。AIスコアも高評価を維持。</p>
+<div class="mt-auto flex items-center justify-end gap-1 text-sm font-medium text-primary transition-colors group-hover:text-white">
+<span>詳細分析を見る</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+</div>
+</div>
+<div class="group flex cursor-pointer flex-col gap-4 rounded-xl border border-[#324467] bg-gradient-to-br from-[#192233]/70 to-[#111722]/50 p-5 transition-all duration-300 hover:border-primary hover:shadow-2xl hover:shadow-primary/20">
+<div class="flex items-center justify-between">
+<div class="flex items-baseline gap-3">
+<span class="text-2xl font-bold text-slate-400">3</span>
+<h3 class="text-base font-bold text-white">クリーンエナジー・フューチャー (9012)</h3>
+</div>
+<div class="text-lg font-bold text-[#00FFAB]" style="text-shadow: 0 0 8px rgba(0, 255, 171, 0.5);">+15.8%</div>
+</div>
+<p class="text-sm leading-relaxed text-slate-400">政府の新たな環境政策が追い風に。関連セクター全体での資金流入が確認されています。</p>
+<div class="mt-auto flex items-center justify-end gap-1 text-sm font-medium text-primary transition-colors group-hover:text-white">
+<span>詳細分析を見る</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+</div>
+</div>
+<div class="group flex cursor-pointer flex-col gap-4 rounded-xl border border-[#324467] bg-gradient-to-br from-[#192233]/70 to-[#111722]/50 p-5 transition-all duration-300 hover:border-primary hover:shadow-2xl hover:shadow-primary/20">
+<div class="flex items-center justify-between">
+<div class="flex items-baseline gap-3">
+<span class="text-2xl font-bold text-slate-400">4</span>
+<h3 class="text-base font-bold text-white">ネクストジェン・リテール (3456)</h3>
+</div>
+<div class="text-lg font-bold text-[#00FFAB]" style="text-shadow: 0 0 8px rgba(0, 255, 171, 0.5);">+12.1%</div>
+</div>
+<p class="text-sm leading-relaxed text-slate-400">好調な四半期決算と、AI導入による業務効率化への期待から買いが集まっています。</p>
+<div class="mt-auto flex items-center justify-end gap-1 text-sm font-medium text-primary transition-colors group-hover:text-white">
+<span>詳細分析を見る</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+</div>
+</div>
+<div class="group flex cursor-pointer flex-col gap-4 rounded-xl border border-[#324467] bg-gradient-to-br from-[#192233]/70 to-[#111722]/50 p-5 transition-all duration-300 hover:border-primary hover:shadow-2xl hover:shadow-primary/20">
+<div class="flex items-center justify-between">
+<div class="flex items-baseline gap-3">
+<span class="text-2xl font-bold text-slate-400">5</span>
+<h3 class="text-base font-bold text-white">グローバル・ロジスティクス (7890)</h3>
+</div>
+<div class="text-lg font-bold text-[#00FFAB]" style="text-shadow: 0 0 8px rgba(0, 255, 171, 0.5);">+10.4%</div>
+</div>
+<p class="text-sm leading-relaxed text-slate-400">世界的な物流網の回復と需要拡大が追い風となり、安定した成長が見込まれます。</p>
+<div class="mt-auto flex items-center justify-end gap-1 text-sm font-medium text-primary transition-colors group-hover:text-white">
+<span>詳細分析を見る</span>
+<span class="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+</div>
+</div>
+</div>
+</main>
+<footer class="flex flex-col gap-6 px-5 py-10 text-center @container mt-16 border-t border-white/10">
+<div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 @[480px]:flex-row @[480px]:justify-center">
+<a class="text-slate-400 hover:text-white text-sm font-normal leading-normal transition-colors" href="#">利用規約</a>
+<a class="text-slate-400 hover:text-white text-sm font-normal leading-normal transition-colors" href="#">プライバシーポリシー</a>
+<a class="text-slate-400 hover:text-white text-sm font-normal leading-normal transition-colors" href="#">お問い合わせ</a>
+</div>
+<p class="text-slate-500 text-xs font-normal leading-relaxed max-w-3xl mx-auto">
+              © 2024 AI株分析. All rights reserved.
+              <br/>
+              免責事項：本サービスが提供する情報は、投資判断の参考となる情報の提供を目的としたものであり、投資勧誘を目的としたものではありません。投資に関する最終決定は、ご自身の判断と責任において行ってください。
+            </p>
+</footer>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>
