@@ -1,20 +1,21 @@
 package services
 
 import (
-	"net/http"
-	"fmt"
-	"time"
 	"encoding/json"
+	"fmt"
+	"net/http"
 	"stock-prediction/backend/models"
 	"stock-prediction/backend/repositories"
+	"strings"
+	"time"
 )
 
 type AlphaVantageResponse struct {
 	Metadata           string       `json:"metadata"`
 	LastUpdated        string       `json:"last_updated"`
-	TopGainers         []TickerData `json:"top_gainers"`           // 今回使うのはこれ
-	TopLosers          []TickerData `json:"top_losers"`            // 一応定義
-	MostActivelyTraded []TickerData `json:"most_actively_traded"`  // 一応定義
+	TopGainers         []TickerData `json:"top_gainers"`          // 今回使うのはこれ
+	TopLosers          []TickerData `json:"top_losers"`           // 一応定義
+	MostActivelyTraded []TickerData `json:"most_actively_traded"` // 一応定義
 }
 
 type TickerData struct {
@@ -49,25 +50,48 @@ func FetchAlphaVantageData(apiKey string) (*AlphaVantageResponse, error) {
 }
 
 func SaveAlphaVantageDatatoDB(alphaData *AlphaVantageResponse, repo repositories.IStockRepository) error {
-	loc, _ := time.LoadLocation("America/New_York")
-	today := time.Now().In(loc).Format("2006-01-02")
+	// Alpha Vantage APIのlast_updatedから日付を抽出
+	date, err := extractDateFromLastUpdated(alphaData.LastUpdated)
+	if err != nil {
+		return fmt.Errorf("failed to extract date from last_updated: %w", err)
+	}
 
 	// Top Gainersを保存
-	if err := saveTickerDataToDB(alphaData.TopGainers, "Top Gainers", today, repo); err != nil {
+	if err := saveTickerDataToDB(alphaData.TopGainers, "Top Gainers", date, repo); err != nil {
 		return fmt.Errorf("failed to save top gainers: %w", err)
 	}
-	
+
 	// Top Losersを保存
-	if err := saveTickerDataToDB(alphaData.TopLosers, "Top Losers", today, repo); err != nil {
+	if err := saveTickerDataToDB(alphaData.TopLosers, "Top Losers", date, repo); err != nil {
 		return fmt.Errorf("failed to save top losers: %w", err)
 	}
-	
+
 	// Most Actively Tradedを保存
-	if err := saveTickerDataToDB(alphaData.MostActivelyTraded, "Most Actively Traded", today, repo); err != nil {
+	if err := saveTickerDataToDB(alphaData.MostActivelyTraded, "Most Actively Traded", date, repo); err != nil {
 		return fmt.Errorf("failed to save most actively traded: %w", err)
 	}
 
 	return nil
+}
+
+// extractDateFromLastUpdated はAlpha Vantage APIのlast_updatedフィールドから日付を抽出します
+// フォーマット例: "2025-11-28 16:15:59 US/Eastern"
+func extractDateFromLastUpdated(lastUpdated string) (string, error) {
+	// スペースで分割して最初の部分（日付）を取得
+	parts := strings.Fields(lastUpdated)
+	if len(parts) == 0 {
+		return "", fmt.Errorf("invalid last_updated format: %s", lastUpdated)
+	}
+
+	dateStr := parts[0] // "2025-11-28"
+
+	// 日付フォーマットの検証（YYYY-MM-DD）
+	_, err := time.Parse("2006-01-02", dateStr)
+	if err != nil {
+		return "", fmt.Errorf("invalid date format in last_updated '%s': %w", lastUpdated, err)
+	}
+
+	return dateStr, nil
 }
 
 func saveTickerDataToDB(tickerDataList []TickerData, category string, date string, repo repositories.IStockRepository) error {
@@ -78,7 +102,7 @@ func saveTickerDataToDB(tickerDataList []TickerData, category string, date strin
 			Sector:   "", // 同上
 			Industry: "", // 同上
 		}
-		
+
 		if err := repo.CreateOrUpdateStock(stock); err != nil {
 			return fmt.Errorf("failed to create/update stock %s: %w", tickerData.Ticker, err)
 		}
@@ -94,7 +118,7 @@ func saveTickerDataToDB(tickerDataList []TickerData, category string, date strin
 			NewsSummary:  "", // 後で設定
 			AiAnalysis:   "", // 後で設定
 		}
-		
+
 		if err := repo.CreateOrUpdateDailyRanking(ranking); err != nil {
 			return fmt.Errorf("failed to create/update daily ranking for %s: %w", tickerData.Ticker, err)
 		}

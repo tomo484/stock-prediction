@@ -3,6 +3,7 @@ package repositories
 import (
 	"errors"
 	"stock-prediction/backend/models"
+
 	"gorm.io/gorm"
 )
 
@@ -27,7 +28,7 @@ func NewStockRepository(db *gorm.DB) IStockRepository {
 
 func (r *stockrepository) FindLatestRanking() (*[]models.DailyRanking, error) {
 	var dailyRanking []models.DailyRanking
-	
+
 	// 1. 最新の日付を取得
 	var latestDate string
 	dateResult := r.db.Model(&models.DailyRanking{}).
@@ -39,20 +40,20 @@ func (r *stockrepository) FindLatestRanking() (*[]models.DailyRanking, error) {
 	if latestDate == "" {
 		return nil, errors.New("no data found")
 	}
-	
+
 	// 2. 最新日付のTop Gainersの1~5位を取得
 	result := r.db.Preload("Stock").
 		Where("date = ? AND category = ? AND rank <= ?", latestDate, "Top Gainers", 5).
 		Order("rank ASC").
 		Find(&dailyRanking)
-	
+
 	if result.Error != nil {
 		if result.Error.Error() == "record not found" {
 			return nil, errors.New("no data found")
 		}
 		return nil, result.Error
 	}
-	
+
 	return &dailyRanking, nil
 }
 
@@ -103,10 +104,10 @@ func (r *stockrepository) CreateOrUpdateStock(stock *models.Stock) error {
 	return nil
 }
 
-func (r *stockrepository)  CreateOrUpdateDailyRanking(ranking *models.DailyRanking) error {
+func (r *stockrepository) CreateOrUpdateDailyRanking(ranking *models.DailyRanking) error {
 	var existingRanking models.DailyRanking
-	result := r.db.Where("date = ? AND stock_id = ? AND category = ?", 
-	ranking.Date, ranking.StockID, ranking.Category).First(&existingRanking)
+	result := r.db.Where("date = ? AND stock_id = ? AND category = ?",
+		ranking.Date, ranking.StockID, ranking.Category).First(&existingRanking)
 
 	if result.Error == gorm.ErrRecordNotFound {
 		// 新規作成
@@ -121,31 +122,50 @@ func (r *stockrepository)  CreateOrUpdateDailyRanking(ranking *models.DailyRanki
 
 func (r *stockrepository) FindTopRankingsByCategory(category string, limit int) (*[]models.DailyRanking, error) {
 	var rankings []models.DailyRanking
-	result := r.db.Where("category = ? AND rank <= ?", category, limit).
+
+	// 最新の日付を取得
+	var latestDate string
+	dateResult := r.db.Model(&models.DailyRanking{}).
+		Where("category = ?", category).
+		Select("MAX(date)").
+		Scan(&latestDate)
+
+	if dateResult.Error != nil {
+		return nil, dateResult.Error
+	}
+
+	if latestDate == "" {
+		return nil, errors.New("no data found")
+	}
+
+	// 最新日で、かつAiAnalysisが空のもののみ取得
+	result := r.db.Preload("Stock").
+		Where("category = ? AND rank <= ? AND date = ? AND (ai_analysis = '' OR ai_analysis IS NULL)",
+			category, limit, latestDate).
 		Order("rank ASC").
 		Find(&rankings)
-	
+
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			return nil, errors.New("no data found")
 		}
 		return nil, result.Error
 	}
-	
+
 	return &rankings, nil
 }
 
 func (r *stockrepository) FindStockByID(id uint) (*models.Stock, error) {
 	var stock models.Stock
 	result := r.db.First(&stock, id)
-	
+
 	if result.Error != nil {
 		if result.Error == gorm.ErrRecordNotFound {
 			return nil, errors.New("stock not found")
 		}
 		return nil, result.Error
 	}
-	
+
 	return &stock, nil
 }
 

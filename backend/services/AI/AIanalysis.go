@@ -1,4 +1,4 @@
-package services
+package AI
 
 import (
 	"log"
@@ -17,18 +17,14 @@ func PerformDailyAnalysis(repo repositories.IStockRepository) error {
 	log.Printf("Starting AI analysis for %d stocks...", len(*rankings))
 
 	for _, ranking := range *rankings {
-		// Repository層からStock情報を取得
-		stock, err := repo.FindStockByID(ranking.StockID)
-		if err != nil {
-			log.Printf("Warning: Failed to find stock for ID %d: %v", ranking.StockID, err)
-			continue
-		}
+		// Stock情報は既にPreloadされているので、直接アクセス可能
+		stock := ranking.Stock
 
 		log.Printf("Fetching news for %s...", stock.Ticker)
 
 		// ニュースを取得
-		avApiKey := os.Getenv("ALPHA_VANTAGE_API_KEY")
-		headlines, err := news.FetchNews(stock.Ticker, avApiKey)
+		tavilyApiKey := os.Getenv("TAVILY_API_KEY")
+		headlines, err := news.SearchStockNews(stock.Ticker, tavilyApiKey)
 		if err != nil {
 			log.Printf("Warning: Failed to fetch news for %s: %v", stock.Ticker, err)
 			// エラーでも止まらず、ニュースなしで分析させる（Brave導入ならここで呼ぶ）

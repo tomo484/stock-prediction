@@ -5,6 +5,7 @@ import (
 	"os"
 	"stock-prediction/backend/models"
 	"stock-prediction/backend/repositories"
+	AI "stock-prediction/backend/services/AI"
 )
 
 type IStockService interface {
@@ -49,7 +50,7 @@ func (s *stockservice) SyncData() error {
 		return fmt.Errorf("failed to save data to DB: %w", err)
 	}
 
-	if err := PerformDailyAnalysis(s.repository); err != nil {
+	if err := AI.PerformDailyAnalysis(s.repository); err != nil {
 		return fmt.Errorf("failed to perform daily analysis: %w", err)
 	}
 

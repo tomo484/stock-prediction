@@ -1,10 +1,11 @@
-package services
+package AI
 
 import (
-	"os"
-	"github.com/sashabaranov/go-openai"
-	"fmt"
 	"context"
+	"fmt"
+	"os"
+
+	"github.com/sashabaranov/go-openai"
 )
 
 func AnalyzeStockRise(ticker string, changeRate float64, newsHeadlines []string) (string, error) {
@@ -18,7 +19,7 @@ func AnalyzeStockRise(ticker string, changeRate float64, newsHeadlines []string)
 ニュースがない場合は、その企業の一般的な事業内容と、この上昇率が通常あり得るものかどうかを述べてください。
 回答は150文字以内で、投資家向けに要約してください。
 `
-    newsText := "特になし"
+	newsText := "特になし"
 	if len(newsHeadlines) > 0 {
 		newsText = ""
 		for _, h := range newsHeadlines {
@@ -54,4 +55,3 @@ func AnalyzeStockRise(ticker string, changeRate float64, newsHeadlines []string)
 
 	return resp.Choices[0].Message.Content, nil
 }
-
