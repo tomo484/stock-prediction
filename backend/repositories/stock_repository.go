@@ -79,7 +79,7 @@ func (r *stockrepository) FindStock(ticker string) (*[]models.DailyRanking, erro
 	result := r.db.Preload("Stock").
 		Joins("JOIN stocks ON daily_rankings.stock_id = stocks.id").
 		Where("stocks.ticker = ?", ticker).
-		Order("daily_rankings.created_at DESC").
+		Order("daily_rankings.date DESC").
 		Find(&dailyRanking)
 	if result.Error != nil {
 		if result.Error.Error() == "record not found" {
@@ -172,3 +172,5 @@ func (r *stockrepository) FindStockByID(id uint) (*models.Stock, error) {
 func (r *stockrepository) UpdateDailyRanking(ranking *models.DailyRanking) error {
 	return r.db.Save(ranking).Error
 }
+
+
