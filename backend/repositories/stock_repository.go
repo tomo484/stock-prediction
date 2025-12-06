@@ -16,6 +16,9 @@ type IStockRepository interface {
 	FindTopRankingsByCategory(category string, limit int) (*[]models.DailyRanking, error)
 	FindStockByID(id uint) (*models.Stock, error)
 	UpdateDailyRanking(ranking *models.DailyRanking) error
+	UpdateStock(stock *models.Stock) error
+	UpdateStockMetric(metric *models.StockMetric) error
+	FindStockByTicker(ticker string) (*models.Stock, error)
 }
 
 type stockrepository struct {
@@ -173,4 +176,24 @@ func (r *stockrepository) UpdateDailyRanking(ranking *models.DailyRanking) error
 	return r.db.Save(ranking).Error
 }
 
+func (r *stockrepository) UpdateStock(stock *models.Stock) error {
+	return r.db.Save(stock).Error
+}
 
+func (r *stockrepository) UpdateStockMetric(metric *models.StockMetric) error {
+	return r.db.Save(metric).Error
+}
+
+func (r *stockrepository) FindStockByTicker(ticker string) (*models.Stock, error) {
+	var stock models.Stock
+	result := r.db.Where("ticker = ?", ticker).First(&stock)
+
+	if result.Error != nil {
+		if result.Error == gorm.ErrRecordNotFound {
+			return nil, errors.New("stock not found")
+		}
+		return nil, result.Error
+	}
+
+	return &stock, nil
+}

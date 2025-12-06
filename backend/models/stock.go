@@ -19,8 +19,32 @@ type DailyRanking struct {
 type Stock struct {
 	gorm.Model
 	Ticker   string         `gorm:"uniqueIndex;not null" json:"Ticker"` // 銘柄コード (例: NVDA)
-	Name     string         `json:"Name"`
-	Sector   string         `json:"Sector"`
-	Industry string         `json:"Industry"`
-	Ranking  []DailyRanking `gorm:"foreignKey:StockID" json:"Ranking,omitempty"`
+	Name     string         `json:"Name"`// 企業名
+	Sector   string         `json:"Sector"` //セクター（大分類）
+	Industry string         `json:"Industry"` //業界（小分類）
+	Description string      `gorm:"type:text"json:"Description"` //企業の説明
+	Website string         `json:"Website"` //企業の公式WebsiteURL
+	Country string         `json:"Country"` //企業の本社所在地
+    FullTimeEmployees int  `json:"FullTimeEmployees"` //企業の従業員数
+    Image             string `json:"Image"` //企業のロゴ画像URL
+    IpoDate           string `json:"IpoDate"` //企業のIPO日
+    CEO               string `json:"CEO"` //企業のCEO
+
+	// リレーション
+	Ranking  []DailyRanking `gorm:"foreignKey:StockID" json:"DailyRanking,omitempty"`
+	Metrics  []StockMetric  `gorm:"foreignKey:StockID" json:"StockMetric,omitempty"`
+}
+
+type StockMetric struct {
+    gorm.Model
+    StockID       uint    `gorm:"index"` // Foreign Key (Stockテーブルへの紐付け)
+    Date          string  `gorm:"index"` // 日付
+    MarketCap     float64 `json:"MarketCap"`// 時価総額
+    Volume        int64 `json:"Volume"` // 本日の出来高
+    AverageVolume int64 `json:"AverageVolume"` //過去3か月平均出来高
+    Beta          float64 `json:"Beta"` //ベータ値（市場全体に対する株価の感応度）
+    LastDividend  float64 `json:"LastDividend"` //直近の一株当たりの配当金額
+    
+	// リレーション
+    Stock         Stock   `json:"Stock,omitempty"`
 }
