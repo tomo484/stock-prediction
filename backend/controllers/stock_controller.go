@@ -2,8 +2,11 @@ package controllers
 
 import (
 	"net/http"
-	"github.com/labstack/echo/v4"
+	"stock-prediction/backend/repositories"
 	"stock-prediction/backend/services"
+	xpost "stock-prediction/backend/services/x_post"
+
+	"github.com/labstack/echo/v4"
 )
 
 type IStockController interface {
@@ -11,14 +14,17 @@ type IStockController interface {
 	FindDailyRanking(c echo.Context) error
 	FindStock(c echo.Context) error
 	SyncData(c echo.Context) error
+	XAutomaticallyPost(c echo.Context) error
 }
 
 type stockController struct {
-	service services.IStockService
+	service      services.IStockService
+	xPostService xpost.IXPostService
 }
 
-func NewStockController(service services.IStockService) IStockController {
-	return &stockController{service: service}
+func NewStockController(service services.IStockService, repo repositories.IStockRepository) IStockController {
+	xPostService := xpost.NewXPostService(repo)
+	return &stockController{service: service, xPostService: xPostService}
 }
 
 func (sc *stockController) FindLatestRanking(c echo.Context) error {
@@ -56,4 +62,57 @@ func (sc *stockController) SyncData(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	return c.JSON(http.StatusOK, "Data synchronized successfully")
+}
+
+func (sc *stockController) XAutomaticallyPost(c echo.Context) error {
+	posttype := c.QueryParam("posttype")
+	date := c.QueryParam("date")
+
+	if posttype == "" {
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "type query parameter is required",
+		})
+	}
+
+	var err error
+	var message string
+
+	switch posttype {
+	case "ranking":
+		//ランキング投稿（AiAnalysis無し）
+		err = sc.xPostService.PostRanking(date)
+		message = "Ranking posted to X successfully"
+	case "analysis":
+		//個別分析投稿（5件まとめて）
+		err = sc.xPostService.PostAnalysis(date)
+		message = "Analysis posted to X successfully"
+	case "all":
+		//ランキングと個別分析をまとめて投稿
+		err = sc.xPostService.PostRanking(date)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{
+				"error": "failed to post ranking to x:" + err.Error(),
+			})
+		}
+		err = sc.xPostService.PostAnalysis(date)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, map[string]string{
+				"error": "failed to post analysis to x:" + err.Error(),
+			})
+		}
+		message = "Ranking and analysis posted to X successfully"
+	default:
+		return c.JSON(http.StatusBadRequest, map[string]string{
+			"error": "invalid type. use 'ranking', 'analysis', or 'all'",
+		})
+	}
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, map[string]string{
+			"error": "failed to post to x:" + err.Error(),
+		})
+	}
+
+	return c.JSON(http.StatusOK, map[string]string{
+		"message": message,
+	})
 }

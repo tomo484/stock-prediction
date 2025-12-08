@@ -28,7 +28,7 @@ func main() {
 	// 依存性注入: Repository → Service → Controller
 	stockRepo := repositories.NewStockRepository(dbConn)
 	stockService := services.NewStockService(stockRepo)
-	stockController := controllers.NewStockController(stockService)
+	stockController := controllers.NewStockController(stockService, stockRepo)
 
 	// ルーター設定
 	e := router.NewRouter(stockController)

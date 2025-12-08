@@ -5,6 +5,7 @@ go 1.23.0
 toolchain go1.24.0
 
 require (
+	github.com/dghubble/oauth1 v0.7.3
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/lib/pq v1.10.9
