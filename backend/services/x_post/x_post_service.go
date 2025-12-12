@@ -74,12 +74,44 @@ func NewXPostService(repo repositories.IStockRepository) IXPostService {
 
 // ランキング投稿（AiAnalysis無し）
 func (s *xPostService) PostRanking(date string) error {
+	// ===== 一時的なデバッグコード（削除予定） =====
+	fmt.Printf("🔍 [DEBUG] PostRanking開始 - 環境変数を再確認\n")
+	xApiKey := os.Getenv("X_API_KEY")
+	xPostSecret := os.Getenv("X_POST_SECRET")
+	xAccessToken := os.Getenv("X_ACCESS_TOKEN")
+	xAccessTokenSecret := os.Getenv("X_ACCESS_TOKEN_SECRET")
+
+	fmt.Printf("  X_API_KEY: %s (長さ: %d)\n", maskValue(xApiKey), len(xApiKey))
+	fmt.Printf("  X_POST_SECRET: %s (長さ: %d)\n", maskValue(xPostSecret), len(xPostSecret))
+	fmt.Printf("  X_ACCESS_TOKEN: %s (長さ: %d)\n", maskValue(xAccessToken), len(xAccessToken))
+	fmt.Printf("  X_ACCESS_TOKEN_SECRET: %s (長さ: %d)\n", maskValue(xAccessTokenSecret), len(xAccessTokenSecret))
+
+	missing := []string{}
+	if xApiKey == "" {
+		missing = append(missing, "X_API_KEY")
+	}
+	if xPostSecret == "" {
+		missing = append(missing, "X_POST_SECRET")
+	}
+	if xAccessToken == "" {
+		missing = append(missing, "X_ACCESS_TOKEN")
+	}
+	if xAccessTokenSecret == "" {
+		missing = append(missing, "X_ACCESS_TOKEN_SECRET")
+	}
+	if len(missing) > 0 {
+		fmt.Printf("⚠️  [DEBUG] 未設定の環境変数: %v\n", missing)
+		return fmt.Errorf("missing environment variables: %v", missing)
+	}
+	// ===== デバッグコード終了 =====
+
 	rankings, err := s.repository.FindDailyRanking(date)
 	if err != nil {
 		return fmt.Errorf("failed to find daily rankings:%w", err)
 	}
 
 	text := BuildRankingPost(date, *rankings)
+	fmt.Printf("🔍 [DEBUG] 投稿テキスト生成完了 (長さ: %d文字)\n", len(text))
 	return s.postToX(text)
 }
 
