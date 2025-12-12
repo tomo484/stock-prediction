@@ -44,4 +44,3 @@ func main() {
 		log.Fatal("Failed to start server:", err)
 	}
 }
-
