@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"stock-prediction/backend/repositories"
 	"stock-prediction/backend/services"
@@ -65,8 +66,14 @@ func (sc *stockController) SyncData(c echo.Context) error {
 }
 
 func (sc *stockController) XAutomaticallyPost(c echo.Context) error {
+	// ===== 一時的なデバッグコード（削除予定） =====
+	fmt.Printf("🔍 [DEBUG] XAutomaticallyPost 開始\n")
+	// ===== デバッグコード終了 =====
+
 	posttype := c.QueryParam("posttype")
 	date := c.QueryParam("date")
+
+	fmt.Printf("🔍 [DEBUG] パラメータ: posttype=%s, date=%s\n", posttype, date)
 
 	if posttype == "" {
 		return c.JSON(http.StatusBadRequest, map[string]string{
@@ -80,22 +87,27 @@ func (sc *stockController) XAutomaticallyPost(c echo.Context) error {
 	switch posttype {
 	case "ranking":
 		//ランキング投稿（AiAnalysis無し）
+		fmt.Printf("🔍 [DEBUG] ランキング投稿を開始\n")
 		err = sc.xPostService.PostRanking(date)
 		message = "Ranking posted to X successfully"
 	case "analysis":
 		//個別分析投稿（5件まとめて）
+		fmt.Printf("🔍 [DEBUG] 分析投稿を開始\n")
 		err = sc.xPostService.PostAnalysis(date)
 		message = "Analysis posted to X successfully"
 	case "all":
 		//ランキングと個別分析をまとめて投稿
+		fmt.Printf("🔍 [DEBUG] ランキング+分析投稿を開始\n")
 		err = sc.xPostService.PostRanking(date)
 		if err != nil {
+			fmt.Printf("🔍 [DEBUG] ランキング投稿エラー: %v\n", err)
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": "failed to post ranking to x:" + err.Error(),
 			})
 		}
 		err = sc.xPostService.PostAnalysis(date)
 		if err != nil {
+			fmt.Printf("🔍 [DEBUG] 分析投稿エラー: %v\n", err)
 			return c.JSON(http.StatusInternalServerError, map[string]string{
 				"error": "failed to post analysis to x:" + err.Error(),
 			})
@@ -107,11 +119,13 @@ func (sc *stockController) XAutomaticallyPost(c echo.Context) error {
 		})
 	}
 	if err != nil {
+		fmt.Printf("🔍 [DEBUG] 投稿エラー: %v\n", err)
 		return c.JSON(http.StatusInternalServerError, map[string]string{
 			"error": "failed to post to x:" + err.Error(),
 		})
 	}
 
+	fmt.Printf("✅ [DEBUG] XAutomaticallyPost 成功\n")
 	return c.JSON(http.StatusOK, map[string]string{
 		"message": message,
 	})
