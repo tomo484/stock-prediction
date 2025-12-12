@@ -16,7 +16,7 @@ func NewRouter(sc controllers.IStockController) *echo.Echo {
 			"http://localhost:3000",
 			"http://localhost:3001",
 			"http://localhost:3004",
-			"https://stock-prediction-ccq0b14r8-tomotsuyu1212-gmailcoms-projects.vercel.app/",
+			"https://stock-prediction-fawn.vercel.app/",
 		},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
