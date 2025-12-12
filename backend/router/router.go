@@ -39,6 +39,7 @@ func NewRouter(sc controllers.IStockController) *echo.Echo {
 	// Admin routes
 	admin := api.Group("/admin")
 	admin.POST("/sync", sc.SyncData)
+	admin.POST("/xpost", sc.XAutomaticallyPost)
 
 	return e
 }
