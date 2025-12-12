@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -23,16 +22,12 @@ func NewDB() *gorm.DB {
 		}
 	}
 
-	// PostgreSQL接続URLを構築
-	// 環境変数から接続情報を取得
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-		os.Getenv("DB_PORT"),
-	)
+	// PostgreSQL接続URLを取得
+	// supabaseDB_URL環境変数から接続情報を取得
+	dsn := os.Getenv("supabaseDB_URL")
+	if dsn == "" {
+		log.Fatalln("supabaseDB_URL environment variable is not set")
+	}
 
 	// GORMでPostgreSQLに接続
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -57,4 +52,3 @@ func CloseDB(db *gorm.DB) {
 
 	log.Println("Database connection closed")
 }
-
