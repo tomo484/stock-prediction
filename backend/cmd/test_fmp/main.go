@@ -6,11 +6,10 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-
 	"github.com/joho/godotenv"
 	"stock-prediction/backend/db"
 	"stock-prediction/backend/repositories"
-	"stock-prediction/backend/services"
+	america_stock "stock-prediction/backend/services/America_stock"
 )
 
 func main() {
@@ -48,7 +47,7 @@ func main() {
 	fmt.Println("==========================================")
 
 	// FMP APIを呼び出し
-	fmpData, err := services.FetchFMPData(ticker, apiKey)
+	fmpData, err := america_stock.FetchFMPData(ticker, apiKey)
 	if err != nil {
 		log.Fatalf("❌ エラー: %v", err)
 	}
@@ -97,7 +96,7 @@ func main() {
 			fmt.Printf("✅ Stock %s が見つかりました (ID: %d)\n", ticker, stock.ID)
 			
 			// FMPデータをDBに保存
-			if err := services.SaveFMPDatatoDB(fmpData, repo); err != nil {
+			if err := america_stock.SaveFMPDatatoDB(fmpData, repo); err != nil {
 				log.Printf("❌ DB保存エラー: %v", err)
 			} else {
 				fmt.Println("✅ DBへの保存が完了しました")
@@ -107,5 +106,9 @@ func main() {
 
 	fmt.Println("\n✅ テスト完了！")
 }
+
+
+
+
 
 

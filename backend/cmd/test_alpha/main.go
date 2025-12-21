@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 
 	"github.com/joho/godotenv"
-	"stock-prediction/backend/services"
+	america_stock "stock-prediction/backend/services/America_stock"
 )
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 	fmt.Println("==========================================")
 
 	// Alpha Vantage APIを呼び出し
-	data, err := services.FetchAlphaVantageData(apiKey)
+	data, err := america_stock.FetchAlphaVantageData(apiKey)
 	if err != nil {
 		log.Fatalf("❌ エラー: %v", err)
 	}

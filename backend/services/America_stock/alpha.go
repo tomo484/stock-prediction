@@ -1,4 +1,4 @@
-package services
+package america_stock
 
 import (
 	"encoding/json"
@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"stock-prediction/backend/models"
 	"stock-prediction/backend/repositories"
+	"stock-prediction/backend/utils"
 	"strings"
 	"time"
 )
@@ -112,9 +113,9 @@ func saveTickerDataToDB(tickerDataList []TickerData, category string, date strin
 			Date:         date,
 			Rank:         rank + 1, // 1位から始まる
 			Category:     category,
-			ChangeAmount: ParseFloat(tickerData.ChangeAmount),
-			ChangeRate:   ParsePercentage(tickerData.ChangePercentage),
-			Price:        ParseFloat(tickerData.Price),
+			ChangeAmount: utils.ParseFloat(tickerData.ChangeAmount),
+			ChangeRate:   utils.ParsePercentage(tickerData.ChangePercentage),
+			Price:        utils.ParseFloat(tickerData.Price),
 			NewsSummary:  "", // 後で設定
 			AiAnalysis:   "", // 後で設定
 		}

@@ -6,6 +6,7 @@ import (
 	"stock-prediction/backend/models"
 	"stock-prediction/backend/repositories"
 	AI "stock-prediction/backend/services/AI"
+	america_stock "stock-prediction/backend/services/America_stock"
 )
 
 type IStockService interface {
@@ -46,22 +47,22 @@ func (s *stockservice) SyncData() error {
 		return fmt.Errorf("FMP_API_KEY is not set")
 	}
 
-    // Alpha Vantage APIからデータを取得
-	alphadata, err := FetchAlphaVantageData(AlphaVantageApiKey)
+	// Alpha Vantage APIからデータを取得
+	alphadata, err := america_stock.FetchAlphaVantageData(AlphaVantageApiKey)
 	if err != nil {
 		return fmt.Errorf("failed to fetch Alpha Vantage data: %w", err)
 	}
 
 	// Alpha Vantage APIから取得したデータをDBに保存
-	if err := SaveAlphaVantageDatatoDB(alphadata, s.repository); err != nil {
+	if err := america_stock.SaveAlphaVantageDatatoDB(alphadata, s.repository); err != nil {
 		return fmt.Errorf("failed to save data to DB: %w", err)
 	}
 
 	//Top Gainersの企業情報を更新（静的情報は空の場合のみ、動的情報は常に更新させる）
 	for _, tickerData := range alphadata.TopGainers {
-		if err := SyncCompanyInfo(tickerData.Ticker, s.repository, FmpApiKey); err != nil {
+		if err := america_stock.SyncCompanyInfo(tickerData.Ticker, s.repository, FmpApiKey); err != nil {
 			// エラーが発生してもログに記録するのみで全体は中断しない
-			fmt.Printf("failed to sync company info for %s: %w", tickerData.Ticker, err)
+			fmt.Printf("failed to sync company info for %s: %v\n", tickerData.Ticker, err)
 		}
 	}
 

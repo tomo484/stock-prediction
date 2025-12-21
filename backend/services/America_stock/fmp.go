@@ -1,4 +1,4 @@
-package services
+package america_stock
 
 import (
 	"encoding/json"
@@ -6,46 +6,47 @@ import (
 	"net/http"
 	"stock-prediction/backend/models"
 	"stock-prediction/backend/repositories"
+	"stock-prediction/backend/utils"
 	"time"
 )
 
 type FMPResponse struct {
-    Symbol            string  `json:"symbol"`
-    Price             float64 `json:"price"`
-    MarketCap         float64 `json:"marketCap"`
-    Beta              float64 `json:"beta"`
-    LastDividend      float64 `json:"lastDividend"`
-    Range             string  `json:"range"`
-    Change            float64 `json:"change"`
-    ChangePercentage  float64 `json:"changePercentage"`
-    Volume            int64   `json:"volume"`
-    AverageVolume     int64   `json:"averageVolume"`
-    CompanyName       string  `json:"companyName"`
-    Currency          string  `json:"currency"`
-    Cik               string  `json:"cik"`
-    Isin              string  `json:"isin"`
-    Cusip             string  `json:"cusip"`
-    ExchangeFullName  string  `json:"exchangeFullName"`
-    Exchange          string  `json:"exchange"`
-    Industry          string  `json:"industry"`
-    Website           string  `json:"website"`
-    Description       string  `json:"description"`
-    CEO               string  `json:"ceo"`
-    Sector            string  `json:"sector"`
-    Country           string  `json:"country"`
-    FullTimeEmployees string  `json:"fullTimeEmployees"` // APIは文字列で返す
-    Phone             string  `json:"phone"`
-    Address           string  `json:"address"`
-    City              string  `json:"city"`
-    State             string  `json:"state"`
-    Zip               string  `json:"zip"`
-    Image             string  `json:"image"`
-    IpoDate           string  `json:"ipoDate"`
-    DefaultImage      bool    `json:"defaultImage"`
-    IsEtf             bool    `json:"isEtf"`
-    IsActivelyTrading bool    `json:"isActivelyTrading"`
-    IsAdr             bool    `json:"isAdr"`
-    IsFund            bool    `json:"isFund"`
+	Symbol            string  `json:"symbol"`
+	Price             float64 `json:"price"`
+	MarketCap         float64 `json:"marketCap"`
+	Beta              float64 `json:"beta"`
+	LastDividend      float64 `json:"lastDividend"`
+	Range             string  `json:"range"`
+	Change            float64 `json:"change"`
+	ChangePercentage  float64 `json:"changePercentage"`
+	Volume            int64   `json:"volume"`
+	AverageVolume     int64   `json:"averageVolume"`
+	CompanyName       string  `json:"companyName"`
+	Currency          string  `json:"currency"`
+	Cik               string  `json:"cik"`
+	Isin              string  `json:"isin"`
+	Cusip             string  `json:"cusip"`
+	ExchangeFullName  string  `json:"exchangeFullName"`
+	Exchange          string  `json:"exchange"`
+	Industry          string  `json:"industry"`
+	Website           string  `json:"website"`
+	Description       string  `json:"description"`
+	CEO               string  `json:"ceo"`
+	Sector            string  `json:"sector"`
+	Country           string  `json:"country"`
+	FullTimeEmployees string  `json:"fullTimeEmployees"` // APIは文字列で返す
+	Phone             string  `json:"phone"`
+	Address           string  `json:"address"`
+	City              string  `json:"city"`
+	State             string  `json:"state"`
+	Zip               string  `json:"zip"`
+	Image             string  `json:"image"`
+	IpoDate           string  `json:"ipoDate"`
+	DefaultImage      bool    `json:"defaultImage"`
+	IsEtf             bool    `json:"isEtf"`
+	IsActivelyTrading bool    `json:"isActivelyTrading"`
+	IsAdr             bool    `json:"isAdr"`
+	IsFund            bool    `json:"isFund"`
 }
 
 func FetchFMPData(ticker string, apiKey string) (*FMPResponse, error) {
@@ -59,7 +60,7 @@ func FetchFMPData(ticker string, apiKey string) (*FMPResponse, error) {
 	defer res.Body.Close()
 
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("データの取得に失敗しました(Status関連で):%w", res.Status)
+		return nil, fmt.Errorf("データの取得に失敗しました(Status関連で): %s", res.Status)
 	}
 
 	var result []FMPResponse
@@ -88,7 +89,7 @@ func SaveFMPDatatoDB(fmpData *FMPResponse, repo repositories.IStockRepository) e
 		stock.Description = fmpData.Description
 		stock.Website = fmpData.Website
 		stock.Country = fmpData.Country
-		stock.FullTimeEmployees = int(ParseInt(fmpData.FullTimeEmployees))
+		stock.FullTimeEmployees = int(utils.ParseInt(fmpData.FullTimeEmployees))
 		stock.Image = fmpData.Image
 		stock.IpoDate = fmpData.IpoDate
 		stock.CEO = fmpData.CEO

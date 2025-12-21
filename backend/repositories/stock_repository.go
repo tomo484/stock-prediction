@@ -19,7 +19,7 @@ type IStockRepository interface {
 	UpdateStock(stock *models.Stock) error
 	UpdateStockMetric(metric *models.StockMetric) error
 	FindStockByTicker(ticker string) (*models.Stock, error)
-	FindDailyRankingByDateAndRank(date string, rank int, category string)(*models.DailyRanking, error)
+	FindDailyRankingByDateAndRank(date string, rank int, category string) (*models.DailyRanking, error)
 }
 
 type stockrepository struct {
@@ -105,7 +105,7 @@ func (r *stockrepository) CreateOrUpdateStock(stock *models.Stock) error {
 	}
 
 	stock.ID = existingStock.ID
-	return nil
+	return r.db.Model(&existingStock).Updates(stock).Error
 }
 
 func (r *stockrepository) CreateOrUpdateDailyRanking(ranking *models.DailyRanking) error {
@@ -199,7 +199,7 @@ func (r *stockrepository) FindStockByTicker(ticker string) (*models.Stock, error
 	return &stock, nil
 }
 
-func (r *stockrepository) FindDailyRankingByDateAndRank(date string, rank int, category string)(*models.DailyRanking, error) {
+func (r *stockrepository) FindDailyRankingByDateAndRank(date string, rank int, category string) (*models.DailyRanking, error) {
 	var ranking models.DailyRanking
 	result := r.db.Preload("Stock").Where("date = ? AND category = ? AND rank = ?", date, category, rank).First(&ranking)
 
